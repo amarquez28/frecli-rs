@@ -16,6 +16,7 @@
   - Default limit for `stats` and `run`
   - Custom DB and ignore list paths
   - Theme/color options
+  - Ability to pin commands and command snippets
 - [ ] `frecli config` subcommand to view/edit config interactively
 
 ## TUI Improvements
@@ -38,8 +39,9 @@
 - [ ] Optional deduplication window — don't log the same command twice within N seconds
 
 ## Quality of Life
-- [ ] `frecli ignore add <pattern>` — add to ignore list from CLI instead of editing the file manually
-- [ ] `frecli ignore list` — print current ignore list
+- [x] `frecli ignore add <pattern>` — add to ignore list from CLI instead of editing the file manually
+- [x] `frecli ignore list` — print current ignore list
+- [x] `frecli ignore remove <pattern>` — remove the pattern from the ignore list
 - [ ] `frecli clear` — wipe the entire history DB
 - [ ] Man page generation from clap (`clap_mangen`)
 - [ ] Shell completions generation (`clap_complete`) for zsh/bash/fish
