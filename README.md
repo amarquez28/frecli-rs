@@ -69,7 +69,16 @@ macOS will quarantine a downloaded binary; clear it with
 
 ## Configuring the ignore list
 
-Commands you don't want logged go in `~/.config/frecli/ignore`, one per line:
+Commands you don't want logged are stored in `~/.config/frecli/ignore`.
+Manage them from the CLI:
+
+| Command | What it does |
+|---|---|
+| `fr ignore add <pattern>` | Add a command to the ignore list |
+| `fr ignore list` | Print the current ignore list |
+| `fr ignore remove <command>` | Remove an entry |
+
+Or edit the file directly, one entry per line:
 
 ```
 ls
