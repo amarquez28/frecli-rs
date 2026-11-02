@@ -33,10 +33,12 @@ fr() {
         return $?
     fi
 
-    local choice_file="/tmp/frecli-rs_choice"
-    rm -f "$choice_file"
-    "$_FRECLI_BIN" "${@:-run}"
-    [[ -f "$choice_file" ]] || return 0
+    # The binary writes the user's choice to a private temp file whose path
+    # we hand it via FRECLI_CHOICE_FILE (a fixed /tmp path would let other
+    # users on a shared machine plant a command for us to eval).
+    local choice_file
+    choice_file=$(mktemp "${TMPDIR:-/tmp}/frecli-choice.XXXXXX") || return 1
+    FRECLI_CHOICE_FILE="$choice_file" "$_FRECLI_BIN" "${@:-run}"
 
     local content
     content=$(<"$choice_file")

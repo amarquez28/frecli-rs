@@ -2,7 +2,7 @@ use chrono::{TimeDelta, prelude::*};
 use rusqlite::{Connection, Result};
 use std::{
     collections::HashSet,
-    env::home_dir,
+    env::{home_dir, var},
     fs::{self, OpenOptions, rename},
     io::{Read, Write},
     path::PathBuf,
@@ -15,15 +15,22 @@ pub struct Command {
     count: u32,
 }
 
-const DB_PATH: &str = ".local/share/frecli/history.db";
-const IGNORE_PATH: &str = ".config/frecli/ignore";
-const TEMP_IGNORE_PATH: &str = ".config/frecli/ignore_temp";
+const DB_PATH: &str = "frecli/history.db";
+const IGNORE_PATH: &str = "frecli/ignore";
 
 fn db() -> PathBuf {
-    home_dir().unwrap().join(DB_PATH)
+    xdg_dir("XDG_DATA_HOME", ".local/share").join(DB_PATH)
 }
 fn ignore() -> PathBuf {
-    home_dir().unwrap().join(IGNORE_PATH)
+    xdg_dir("XDG_CONFIG_HOME", ".config").join(IGNORE_PATH)
+}
+
+fn xdg_dir(var_name: &str, default: &str) -> PathBuf {
+    var(var_name)
+        .ok()
+        .map(PathBuf::from)
+        .filter(|p| p.is_absolute())
+        .unwrap_or_else(|| home_dir().unwrap().join(default))
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -109,7 +116,7 @@ pub fn remove_ignore_command(command: String) -> Result<(), FrecliError> {
         return Ok(());
     }
 
-    let temp_path = home_dir().unwrap().join(TEMP_IGNORE_PATH);
+    let temp_path = ignore().with_file_name("ignore_temp");
     let mut temp_file = OpenOptions::new()
         .write(true)
         .create(true)
