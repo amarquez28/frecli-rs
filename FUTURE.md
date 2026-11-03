@@ -2,7 +2,7 @@
 
 ## Distribution
 - [ ] Homebrew formula so users can `brew install frecli-rs` instead of building from source
-- [ ] Pre-built binaries for Linux (x86_64, aarch64) in addition to macOS releases
+- [x] Pre-built binaries for Linux (x86_64, aarch64) in addition to macOS releases
 - [ ] AUR package for Arch Linux users
 
 ## Shell Support
@@ -42,6 +42,6 @@
 - [x] `frecli ignore add <pattern>` — add to ignore list from CLI instead of editing the file manually
 - [x] `frecli ignore list` — print current ignore list
 - [x] `frecli ignore remove <pattern>` — remove the pattern from the ignore list
-- [ ] `frecli clear` — wipe the entire history DB
+- [x] `frecli clear` — wipe the entire history DB
 - [ ] Man page generation from clap (`clap_mangen`)
 - [ ] Shell completions generation (`clap_complete`) for zsh/bash/fish
