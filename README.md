@@ -42,21 +42,50 @@ is already there). Restart your shell afterwards.
 
 To pick a shell explicitly: `./scripts/install.sh --shell bash`.
 
-### Prebuilt binary
+### Prebuilt binary (no Rust needed)
 
-Download `frecli-rs` for your platform from the
-[latest release](https://github.com/amarquez28/frecli-rs/releases), put it
-somewhere on your `$PATH` (e.g. `~/.local/bin/`), then install the hook for
-your shell (replace `zsh` with `bash` and `~/.zshrc` with `~/.bashrc` as needed):
+Each [release](https://github.com/amarquez28/frecli-rs/releases) ships one
+archive per platform. Each archive contains the `frecli-rs` binary plus the
+`hook.bash` and `hook.zsh` files that match that version.
+
+| Platform | Archive |
+|---|---|
+| Linux x86_64 | `frecli-rs-x86_64-unknown-linux-musl.tar.gz` |
+| Linux arm64 | `frecli-rs-aarch64-unknown-linux-musl.tar.gz` |
+| macOS Apple Silicon | `frecli-rs-aarch64-apple-darwin.tar.gz` |
+| macOS Intel | `frecli-rs-x86_64-apple-darwin.tar.gz` |
+
+The Linux builds are static, so they run on any distribution (Debian, Ubuntu,
+Fedora, Arch, Alpine, ...) with nothing else installed.
+
+#### Linux
 
 ```sh
-mkdir -p ~/.config/frecli
-curl -fsSL https://raw.githubusercontent.com/amarquez28/frecli-rs/main/scripts/hook.zsh \
-    -o ~/.config/frecli/hook.zsh
-echo 'source ~/.config/frecli/hook.zsh' >> ~/.zshrc
+# 1. Download and unpack (uname -m prints x86_64 or aarch64)
+mkdir frecli && cd frecli
+curl -fsSL "https://github.com/amarquez28/frecli-rs/releases/latest/download/frecli-rs-$(uname -m)-unknown-linux-musl.tar.gz" | tar -xz
+
+# 2. Install the binary and your shell's hook (use hook.zsh and ~/.zshrc for zsh)
+mkdir -p ~/.local/bin ~/.config/frecli
+install -m 755 frecli-rs ~/.local/bin/frecli-rs
+cp hook.bash ~/.config/frecli/hook.bash
+echo 'source ~/.config/frecli/hook.bash' >> ~/.bashrc
+
+# 3. Start a new shell
+exec bash
 ```
 
-On macOS, a downloaded binary is quarantined; clear it with
+If `fr` or `frecli-rs` isn't found, `~/.local/bin` isn't on your `PATH` yet.
+Debian and Ubuntu add it at login when the directory exists, so logging out
+and back in is enough; otherwise add
+`export PATH="$HOME/.local/bin:$PATH"` to `~/.bashrc` above the frecli line.
+
+#### macOS
+
+Same steps with the macOS archive (use `aarch64-apple-darwin` or
+`x86_64-apple-darwin`, since `uname -m` reports `arm64` on Apple Silicon), and
+`~/.zshrc` with `hook.zsh` for the default shell. A downloaded binary is
+quarantined by macOS; clear it with
 `xattr -d com.apple.quarantine ~/.local/bin/frecli-rs`.
 
 ## Usage
