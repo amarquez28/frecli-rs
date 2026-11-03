@@ -152,6 +152,14 @@ pub fn prune_commands(older_than: u32) -> Result<(), FrecliError> {
     Ok(())
 }
 
+pub fn clear() -> Result<(), FrecliError> {
+    let db = db();
+    let conn = Connection::open(&db)?;
+    let rows = conn.execute("DELETE FROM commands", ())?;
+    println!("{} Rows Deleted", rows);
+    Ok(())
+}
+
 pub fn get_commands(limit: u32) -> Result<Vec<Command>, FrecliError> {
     let conn = Connection::open(db())?;
     let mut query = conn.prepare(

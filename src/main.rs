@@ -29,6 +29,8 @@ enum CLA {
         #[command(subcommand)]
         action: IgnoreAction,
     },
+    #[command(about = "Clear the Entire history of the DB")]
+    Clear,
 }
 
 #[derive(Parser, Debug)]
@@ -71,6 +73,10 @@ fn main() -> Result<(), Box<dyn Error>> {
                 IgnoreAction::List => display::display_ignored(db::get_ignored()?),
                 IgnoreAction::Remove { command } => db::remove_ignore_command(command)?,
             }
+            Ok(())
+        }
+        CLA::Clear => {
+            db::clear()?;
             Ok(())
         }
     }
