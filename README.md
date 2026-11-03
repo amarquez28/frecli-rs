@@ -77,9 +77,7 @@ exec bash
 ```
 
 If `fr` or `frecli-rs` isn't found, `~/.local/bin` isn't on your `PATH` yet.
-Debian and Ubuntu add it at login when the directory exists, so logging out
-and back in is enough; otherwise add
-`export PATH="$HOME/.local/bin:$PATH"` to `~/.bashrc` above the frecli line.
+Add `export PATH="$HOME/.local/bin:$PATH"` to `~/.bashrc`
 
 #### macOS
 
