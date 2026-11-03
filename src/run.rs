@@ -7,9 +7,12 @@ use crossterm::{
     terminal::{self, ClearType::FromCursorDown, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use std::{
+    env::var,
     fs,
     io::{Write, stdout},
 };
+
+const FALLBACK_CHOICE_PATH: &str = "/tmp/frecli-rs_choice";
 
 struct RawModeGuard;
 impl RawModeGuard {
@@ -35,8 +38,10 @@ pub fn run_wrapper(commands: Vec<Command>) -> Result<(), FrecliError> {
 }
 
 pub fn run(commands: Vec<Command>) -> Result<(), FrecliError> {
-    if fs::exists("/tmp/frecli-rs_choice")? {
-        fs::remove_file("/tmp/frecli-rs_choice")?;
+    let choice_path: String =
+        var("FRECLI_CHOICE_FILE").unwrap_or_else(|_| FALLBACK_CHOICE_PATH.to_string());
+    if choice_path == FALLBACK_CHOICE_PATH && fs::exists(&choice_path)? {
+        fs::remove_file(&choice_path)?;
     }
     let mut stdout = stdout();
     let mut selected: usize = 0;
@@ -68,12 +73,12 @@ pub fn run(commands: Vec<Command>) -> Result<(), FrecliError> {
                 }
                 KeyCode::Enter => {
                     let cmd = &commands[selected].text;
-                    fs::write("/tmp/frecli-rs_choice", format!("RUN:{}", cmd))?;
+                    fs::write(&choice_path, format!("RUN:{}", cmd))?;
                     break;
                 }
                 KeyCode::Char('p') => {
                     let cmd = &commands[selected].text;
-                    fs::write("/tmp/frecli-rs_choice", format!("PASTE:{}", cmd))?;
+                    fs::write(&choice_path, format!("PASTE:{}", cmd))?;
                     break;
                 }
                 _ => (),
