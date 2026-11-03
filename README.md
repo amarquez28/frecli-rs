@@ -70,6 +70,7 @@ mkdir -p ~/.local/bin ~/.config/frecli
 install -m 755 frecli-rs ~/.local/bin/frecli-rs
 cp hook.bash ~/.config/frecli/hook.bash
 echo 'source ~/.config/frecli/hook.bash' >> ~/.bashrc
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 
 # 3. Start a new shell
 exec bash
