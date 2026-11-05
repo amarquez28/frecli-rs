@@ -45,3 +45,4 @@
 - [x] `frecli clear` — wipe the entire history DB
 - [ ] Man page generation from clap (`clap_mangen`)
 - [ ] Shell completions generation (`clap_complete`) for zsh/bash/fish
+- [x] Add an update command to streamline the updating process for the user

@@ -3,6 +3,7 @@ use std::error::Error;
 mod db;
 mod display;
 mod run;
+mod update;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -31,6 +32,11 @@ enum CLA {
     },
     #[command(about = "Clear the Entire history of the DB")]
     Clear,
+    #[command(about = "Update the tool to the latest version")]
+    Update {
+        #[arg(long)]
+        force: bool,
+    },
 }
 
 #[derive(Parser, Debug)]
@@ -77,6 +83,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
         CLA::Clear => {
             db::clear()?;
+            Ok(())
+        }
+        CLA::Update { force } => {
+            update::handle_update(force)?;
             Ok(())
         }
     }

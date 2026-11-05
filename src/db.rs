@@ -39,6 +39,10 @@ pub enum FrecliError {
     Db(#[from] rusqlite::Error),
     #[error("io error: {0}")]
     Io(#[from] std::io::Error),
+    #[error("Process Terminated by Signal")]
+    ProcessKilledBySignal,
+    #[error("Exit Code of a process")]
+    ExitCode,
 }
 
 pub fn init_db() -> Result<(), FrecliError> {
