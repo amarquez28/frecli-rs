@@ -85,11 +85,16 @@ pub fn log_ignore_command(pattern: Vec<String>) -> Result<(), FrecliError> {
         .create(true)
         .append(true)
         .open(&ignore_file)?;
-    //TODO: check if the pattern is already in the file before we add it to prevent duplicates
+    let curr_ignore_list = get_ignored()?;
     for line in pattern {
-        writeln!(writer, "{line}")?;
+        if curr_ignore_list.contains(&line){
+            println!("Ignore command \"{}\" already in the Ignore command list: Skipping it", line);
+        }
+        else{
+            writeln!(writer, "{line}")?;
+            println!("Successfully added ignore command");
+        }
     }
-    println!("Successfully added ignore command");
     Ok(())
 }
 
